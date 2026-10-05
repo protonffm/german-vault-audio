@@ -1,7 +1,6 @@
-
 settings.init.allow_root.set(true)
 
-# Unendlicher Loop im Zufallsmodus für deine Hörbücher
+# 1. Deine Hörbuch-Playlist im unendlichen Loop einlesen
 music = playlist(
   mode="randomize", 
   reload_mode="watch", 
@@ -9,9 +8,15 @@ music = playlist(
   "/home/radio/music"
 )
 
-# Ohne Crossfade: Kapitel spielen absolut sauber bis zur letzten Sekunde aus!
-radio = mksafe(music)
+# 2. DER AKUSTISCHE ATEM-TRICK:
+# Wir schweißen eine exakte Pause von 8.0 Sekunden zwischen die Tracks!
+# In dieser Zeit sendet das Radio absolute Stille, bevor das nächste Werk ansetzt.
+music_with_pause = delay(8.0, music)
 
+# 3. Den Stream krisensicher machen
+radio = mksafe(music_with_pause)
+
+# 4. Das fertige Signal in den RAM-Tunnel drücken
 output.file(
   %mp3(bitrate=128),
   append=true,
